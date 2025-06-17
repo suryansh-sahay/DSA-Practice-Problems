@@ -1,1 +1,1 @@
-<h2>count-primes Notes</h2><hr>[ Time taken: 54 m 32 s ]
+<h2>count-primes Notes</h2><hr>[ Time taken: 1 m 34 s ]
