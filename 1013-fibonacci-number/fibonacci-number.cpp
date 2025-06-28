@@ -16,9 +16,9 @@ class Solution{
     public:
     int fib(int n){
         if(n<=1) return n;
-        int ans=1, val=0;
+        int ans=1, val=0, temp;
         for(int i=2; i<=n; i++){  
-            int temp=ans;
+            temp=ans;
             ans=ans+val; 
             val=temp;
         }
