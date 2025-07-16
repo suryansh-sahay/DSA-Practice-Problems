@@ -1,8 +1,16 @@
 class Solution {
 public:
     int missingNumber(vector<int>& nums) {
-        
-        int n=nums.size();
+       int n=nums.size();
+       int sum=0;
+       for(int i=0; i<nums.size(); i++){
+           sum+=i-nums[i];
+       }
+       return sum+n;
+    }
+};
+
+
         // sort(nums.begin(), nums.end());  // nlogn
         // int left=0, right=n;
         // while(left<right){
@@ -12,11 +20,6 @@ public:
         // }
         // return left;
 
-        int sum=n;
-        for(int i=0; i<n; i++){
-            sum=sum+i-nums[i];
-        }
-        return sum;
 
         // vector<bool> check(n+1, false);
         // for(int i=0; i<n; i++){
@@ -29,5 +32,3 @@ public:
         // }
         
         // return val;
-    }
-};
