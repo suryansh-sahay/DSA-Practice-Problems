@@ -1,21 +1,26 @@
 class Solution {
+private:
+    bool checkVowel(char c) {
+        c = tolower(c);
+        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+            return true;
+        return false;
+    }
+
 public:
-    bool isValid(const std::string& word) {
-        if (word.size() < 3) return false;
-
-        static const std::unordered_set<char> vowel{
-            'a','e','i','o','u','A','E','I','O','U'};
-        int v = 0, c = 0;
-
+    bool isValid(string word) {
+        if(word.length()<3) return false;
+        int vcount = 0, ccount = 0;
         for (char ch : word) {
-            if (std::isdigit(static_cast<unsigned char>(ch))) continue;
-
-            if (std::isalpha(static_cast<unsigned char>(ch))) {
-                vowel.count(ch) ? ++v : ++c;
-            } else {
-                return false;                   // bad char
+            if (!isdigit(ch) && !isalpha(ch))
+                return false;
+            if (isalpha(ch)){
+                if (checkVowel(ch))
+                    vcount++;
+                else
+                    ccount++;
             }
         }
-        return v > 0 && c > 0;
+        return vcount>=1 && ccount>=1;
     }
 };
