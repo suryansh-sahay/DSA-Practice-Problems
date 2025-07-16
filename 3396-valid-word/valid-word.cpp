@@ -2,9 +2,7 @@ class Solution {
 private:
     bool checkVowel(char c) {
         c = tolower(c);
-        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
-            return true;
-        return false;
+        return  (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u');
     }
 
 public:
