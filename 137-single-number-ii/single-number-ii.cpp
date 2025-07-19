@@ -1,11 +1,12 @@
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
-        int ones = 0, twos = 0;
-        for (int num : nums) {
-            ones = (ones ^ num) & ~twos;
-            twos = (twos ^ num) & ~ones;
+        int first=0, second=0; 
+        
+        for(int num: nums){
+            first=(first^num) & ~second;
+            second=(second^num) & ~first;
         }
-        return ones;
+        return first;
     }
 };
