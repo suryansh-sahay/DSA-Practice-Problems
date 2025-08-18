@@ -1,24 +1,31 @@
 class Solution {
 public:
     double new21Game(int n, int k, int maxPts) {
-        if (k == 0 || k >= k - 1 + maxPts)
-            return 1.0;
-        if (n < k)
-            return 0.0;
-        std::vector<double> dp (n + 1, 0.0);
-        for (int i = 1; i <= n; i++)
-            dp[i] = 1.0;
-        int right = std::min(n, k + maxPts - 1);
-        double window = 0.0;
-        for (int i = k; i <= right; i++){
-            window += dp[i];
+        // Special cases
+        if (k == 0 || n >= k + maxPts) return 1.0;
+
+        vector<double> dp(n + 1, 0.0);
+        dp[0] = 1.0;
+
+        double windowSum = 1.0;  // running sum of last maxPts valid dp values
+        double ans = 0.0;
+
+        for (int i = 1; i <= n; i++) {
+            dp[i] = windowSum / maxPts;
+
+            if (i < k) {
+                // still drawing, contribute to future
+                windowSum += dp[i];
+            } else {
+                // reached at least k points, game stops
+                ans += dp[i];
+            }
+
+            // remove value that slides out of the window
+            if (i - maxPts >= 0) {
+                windowSum -= dp[i - maxPts];
+            }
         }
-        for (int i = k - 1; i >= 0; i--){
-            dp[i] = window / maxPts;
-            window += dp[i];
-            if (i + maxPts <= n)
-                window -= dp[i + maxPts];
-        }
-        return dp[0];
+        return ans;
     }
 };
