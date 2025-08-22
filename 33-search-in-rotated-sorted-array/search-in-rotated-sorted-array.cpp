@@ -1,30 +1,26 @@
 class Solution {
 public:
-    int search(std::vector<int>& nums, int target) {
-        int low = 0, high = nums.size() - 1;
+    int search(vector<int>& arr, int target) {
+        int n = arr.size();
 
-        while (low <= high) {
-            int mid = (low + high) / 2;
+        int l = 0, r = n - 1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
 
-            if (nums[mid] == target) {
-                return mid;
-            }
+            if (arr[mid] == target) return mid;
 
-            if (nums[low] <= nums[mid]) {
-                if (nums[low] <= target && target < nums[mid]) {
-                    high = mid - 1;
-                } else {
-                    low = mid + 1;
-                }
+            if (arr[mid] < arr[r]) {
+                if (target > arr[mid] && target <= arr[r])
+                    l = mid + 1;
+                else
+                    r = mid - 1;
             } else {
-                if (nums[mid] < target && target <= nums[high]) {
-                    low = mid + 1;
-                } else {
-                    high = mid - 1;
-                }
+                if (target >= arr[l] && target < arr[mid])
+                    r = mid - 1;
+                else
+                    l = mid + 1;
             }
         }
-
         return -1;
     }
 };
