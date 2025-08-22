@@ -9,7 +9,7 @@ public:
 
             if (arr[mid] == target) return mid;
 
-            if (arr[mid] < arr[r]) {
+            if (arr[mid] <= arr[r]) {
                 if (target > arr[mid] && target <= arr[r])
                     l = mid + 1;
                 else
