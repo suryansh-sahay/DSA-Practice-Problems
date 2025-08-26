@@ -1,8 +1,8 @@
 class Solution {
 public:
     int areaOfMaxDiagonal(vector<vector<int>>& dimensions) {
-        double mdiag=INT_MIN;
-        int area=INT_MIN;
+        int mdiag=-1;
+        int area=-1;
         
         for(int i=0; i<dimensions.size(); i++){
             int l=dimensions[i][0];
