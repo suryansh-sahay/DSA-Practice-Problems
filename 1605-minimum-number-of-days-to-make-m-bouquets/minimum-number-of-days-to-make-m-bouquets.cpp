@@ -17,7 +17,6 @@ public:
             }
             if(m2>=m) r=mid;
             else l=mid+1;
-            cout<<m2<<" ";
         }
         return r;
     }
