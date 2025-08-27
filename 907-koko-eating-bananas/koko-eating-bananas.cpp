@@ -7,7 +7,7 @@ public:
            total+=num;
            if(num>maxi) maxi=num;
         }
-        int l=max(1LL, (total-1)/h+1);
+        int l=(total-1)/h+1;
         
         int r=maxi;
         while(l<=r){
