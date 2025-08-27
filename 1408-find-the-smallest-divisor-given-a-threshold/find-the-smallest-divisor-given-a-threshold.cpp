@@ -1,28 +1,20 @@
 class Solution {
 public:
-    int getsum(vector<int>& nums, int mid){
-        int sum = 0;
-        for(int i = 0;i<nums.size();i++){
-            sum += (nums[i] + mid -1)/mid;
-        }
-        return sum;
-    }
     int smallestDivisor(vector<int>& nums, int threshold) {
-        
-        int start = 1;
-        int end = *max_element(nums.begin(),nums.end());
-        int ans = end;
-        while(start<=end){
-            int mid = start + (end- start)/2;
-            int sum = getsum(nums,mid);
-            if(sum<=threshold){
-                ans = mid;
-                end = mid - 1;
+        int l=1;
+        int r=*max_element(nums.begin(), nums.end());
+
+        while(l<r){
+            int mid=l+(r-l)/2;
+            long long sum=0; 
+            for(int num: nums) {
+                sum+=(num-1)/mid+1;  
+                if(sum>threshold) break;
             }
-            else{
-                start = mid + 1;
-            } 
-        }
-        return ans;
+
+            if(sum>threshold)  l=mid+1; 
+            else r=mid;   
+        } 
+        return l;
     }
 };
