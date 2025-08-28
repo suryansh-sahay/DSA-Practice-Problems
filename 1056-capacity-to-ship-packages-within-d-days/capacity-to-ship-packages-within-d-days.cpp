@@ -5,7 +5,7 @@ public:
         int r=0; 
         for(int num: weights) r+=num;
         
-        while(l<r){
+        while(l<=r){
             int mid=l+(r-l)/2;
             int sum=0, count=1;
 
@@ -14,7 +14,7 @@ public:
                 sum+=num;
             }
             if(count>days) l=mid+1;
-            else r=mid; 
+            else r=mid-1; 
         }
         return l;
     }
