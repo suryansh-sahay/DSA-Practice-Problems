@@ -1,26 +1,22 @@
 class Solution {
 public:
     int beautySum(string s) {
-        int ans = 0;
-
-        for (int i = 0; i < (int)s.length(); ++i) {
-            vector<int> count(26);
-            for (int j = i; j < (int)s.length(); ++j) {
-                ++count[s[j] - 'a'];
-                ans += *max_element(count.begin(), count.end())
-                     - getMinFreq(count);
+        int n=s.size();
+        int sum=0;
+        for(int i=0; i<n; i++){
+            vector<int> freq(26,0);
+            for(int j=i; j<n; j++){
+                freq[s[j]-'a']++;
+                int maxi=0, mini=500; 
+                for(int val: freq){
+                    if(val>0){
+                        maxi=max(maxi, val);
+                        mini=min(mini, val);
+                    }
+                }
+                sum+=maxi-mini;
             }
         }
-        return ans;
-    }
-
-private:
-    // Returns the minimum frequency > 0.
-    int getMinFreq(const vector<int>& count) {
-        int minFreq = INT_MAX;
-        for (int freq : count)
-            if (freq > 0)
-                minFreq = min(minFreq, freq);
-        return minFreq;
+        return sum;
     }
 };
