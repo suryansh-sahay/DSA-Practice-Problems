@@ -8,13 +8,17 @@
  */
 class Solution {
 public:
+ 
     bool hasCycle(ListNode *head) {
-       const int cons=100000+1;
-       while(head!=nullptr){
-           head->val= cons;
-           head=head->next;
-           if(head!=nullptr && head->val==cons) return true;
+       if(head == NULL) return false;
+       ListNode* slow = head;
+       ListNode* fast = head;
+       while(fast && fast -> next){
+        slow = slow->next;
+        fast = fast->next->next;
+        if(slow == fast) return true;
        }
        return false;
+
     }
 };
