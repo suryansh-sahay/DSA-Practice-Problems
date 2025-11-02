@@ -1,52 +1,15 @@
 class Solution {
 public:
-    void dfs(int r, int c, string dir, vector<vector<int>>& vis, map<pair<int, int>, int>& mp){
-        int n = vis.size();
-        int m = vis[0].size();
-        if(r<0 || c<0 || r>=n || c>=m) return;
-        if(mp.find({r, c})!=mp.end()) return;
-        else vis[r][c] = 1;
-
-        if(dir == "r"){
-            dfs(r, c+1, "r", vis, mp);
-        }
-        if(dir == "l"){
-            dfs(r, c-1, "l", vis, mp);
-        }
-        if(dir == "u"){
-            dfs(r-1, c, "u", vis, mp);
-        }
-        if(dir == "d"){
-            dfs(r+1, c, "d", vis, mp);
-        }
-    }
+    
     int countUnguarded(int m, int n, vector<vector<int>>& guards, vector<vector<int>>& walls) {
-        vector<vector<int>> vis(m, vector<int> (n));
-        queue<pair<int, int>> q;
-        map<pair<int, int>, int> mp;
-        for(auto it: guards){
-            q.push({it[0], it[1]});
-            mp[{it[0], it[1]}]++;
-            vis[it[0]][it[1]] = 1;
-        }
-        for(auto it: walls) {
-            mp[{it[0], it[1]}]++;
-            vis[it[0]][it[1]] = 1;
-        }
-        for(auto it: guards){
-            int r = it[0];
-            int c = it[1];
-            dfs(r, c+1, "r", vis, mp);
-            dfs(r, c-1, "l", vis, mp);
-            dfs(r+1, c, "d", vis, mp);
-            dfs(r-1, c, "u", vis, mp);
-        }
-        int cnt=0;
-        for(int i=0; i<m; i++){
-            for(int j=0; j<n; j++){
-                if(vis[i][j] == 0) cnt++;
-            }
-        }
-        return cnt;
+        vector<int> g(m * n);
+        for (auto& pos : walls) g[pos[0] * n + pos[1]] = 2;
+        for (auto& pos : guards) g[pos[0] * n + pos[1]] = 2;
+        for (auto& pos : guards)
+            for (int i = 0, d[] = {1,0,-1,0,0,1,0,-1}; i < 7; i += 2) 
+                for (int y = pos[0] + d[i], x = pos[1] + d[i + 1];
+                    y >= 0 && y < m && x >= 0 && x < n && g[y * n + x] < 2;)
+                        g[y * n + x] = 1, y += d[i], x += d[i + 1];
+        return count_if(g.begin(), g.end(), [](int v){ return v < 1; }); 
     }
 };
