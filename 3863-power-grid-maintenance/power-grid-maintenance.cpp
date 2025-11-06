@@ -1,52 +1,61 @@
-class UnionFind { 
-    vector<int> root, rank;
-public:
-    UnionFind(int N) : root(N+1), rank(N+1){ 
-        rank.assign(N+1, 1);
-        iota(root.begin(), root.end(), 0);
-    }
-
-    int Find(int x) {
-        return (x == root[x])?x:root[x] = Find(root[x]);
-    }
-
-    bool Union(int x, int y) {
-        x= Find(x), y= Find(y);
-        if (x==y)
-            return 0;
-        if (rank[x] > rank[y])
-            swap(x, y);
-        root[x] = y;
-        if (rank[x] == rank[y])
-            rank[y]++;
-        return 1;
-    }
-};
-
 class Solution {
 public:
-    static vector<int> processQueries(int c, vector<vector<int>>& connections, vector<vector<int>>& queries) {
-        UnionFind G(c);
-        for(auto& e: connections){
-            G.Union(e[0], e[1]);
+    vector<int> processQueries(int nodes, vector<vector<int>>& connections, vector<vector<int>>& queries) {
+        int parents[nodes + 1];
+        for (int node = 1; node <= nodes; ++node) {
+            parents[node] = node;
         }
-        vector<set<int>> comp(c+1);
-        for(int i=1; i<=c; i++){
-            comp[G.Find(i)].insert(i);
+        for (vector<int>& connection : connections) {
+            parents[unionfind(parents, connection[0])] = unionfind(parents, connection[1]);
         }
-        vector<int> ans;
-        for(auto& q: queries){
-            const int t=q[0], x=q[1], rx=G.Find(x);
-            auto& C=comp[rx];
-            if (t==2)
-                C.erase(x);
-            else{
-                if (C.empty()) ans.push_back(-1);
-                else if (C.count(x)) ans.push_back(x);
-                else ans.push_back(*C.begin());
+        int size_q = queries.size();
+        vector<bool> online(nodes + 1, true);
+        for (int index = 0; index < size_q; ++index) {
+            if (queries[index][0] == 2) {
+                if (online[queries[index][1]]) {
+                    online[queries[index][1]] = false;
+                } else {
+                    queries[index][0] = 3;
+                }
             }
-
         }
-        return ans;
+        int groups[nodes + 1];
+        memset(&groups, 0, sizeof(groups));
+        int order = 1;
+        int min_online[nodes + 1];
+        for (int node = 1; node <= nodes; ++node) {
+            int root = unionfind(parents, node);
+            if (groups[root] == 0) {
+                groups[root] = order, min_online[order] = INT_MAX, ++order;
+            }
+            int group = groups[root];
+            groups[node] = group;
+            if (online[node]) {
+                min_online[group] = min(min_online[group], node);
+            }
+        }
+        vector<int> result;
+        for (int index = size_q - 1; index >= 0; --index) {
+            if (queries[index][0] == 2) {
+                online[queries[index][1]] = true, min_online[groups[queries[index][1]]] = min(min_online[groups[queries[index][1]]], queries[index][1]);
+            } else if (queries[index][0] == 1) {
+                if (online[queries[index][1]]) {
+                    result.push_back(queries[index][1]);
+                } else if (min_online[groups[queries[index][1]]] == INT_MAX) {
+                    result.push_back(-1);
+                } else {
+                    result.push_back(min_online[groups[queries[index][1]]]);
+                }
+            }
+        }
+        reverse(result.begin(), result.end());
+        return result;
+    }
+    int unionfind(int parents[], int node) {
+        if (parents[node] == node) {
+            return node;
+        }
+        parents[node] = unionfind(parents, parents[node]);
+        return parents[node];
     }
 };
