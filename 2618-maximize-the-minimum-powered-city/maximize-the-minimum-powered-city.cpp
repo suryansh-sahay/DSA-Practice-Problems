@@ -1,48 +1,40 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 class Solution {
-public:
-    long long maxPower(vector<int>& stations, int r, long long k) {
-        long long low = 0;
-        long long high = k + accumulate(stations.begin(), stations.end(), 0LL);
+ public:
+  long long maxPower(vector<int>& stations, int r, int k) {
+    long left = ranges::min(stations);
+    long right = accumulate(stations.begin(), stations.end(), 0L) + k + 1;
 
-        while (low < high) {
-            long long mid = high + (low - high) / 2;
-            if (check(stations, mid, r, k)) low = mid;
-            else high = mid - 1;
-        }
-        return low;
+    while (left < right) {
+      const long mid = (left + right) / 2;
+      if (check(stations, r, k, mid))
+        left = mid + 1;
+      else
+        right = mid;
+    }
+    return left - 1;
+  }
+
+ private:
+  bool check(vector<int> stations, int r, int additionalStations,
+             long minPower) {
+    const int n = stations.size();
+    long power = accumulate(stations.begin(), stations.begin() + r, 0L);
+
+    for (int i = 0; i < n; ++i) {
+      if (i + r < n)
+        power += stations[i + r];  // `power` = sum(stations[i - r..i + r]).
+      if (power < minPower) {
+        const long requiredPower = minPower - power;
+        if (requiredPower > additionalStations)
+          return false;
+        stations[min(n - 1, i + r)] += requiredPower;
+        additionalStations -= requiredPower;
+        power += requiredPower;
+      }
+      if (i - r >= 0)
+        power -= stations[i - r];
     }
 
-private:
-    bool check(const vector<int>& stations, long long mid, int r, long long k) {
-        int n = stations.size();
-        vector<long long> diff(n + 1, 0);
-        long long sum = 0;
-
-        for (int i = 0; i <= min(n - 1, r); ++i) sum += stations[i];
-
-        long long extra = 0;
-        for (int i = 0; i < n; ++i) {
-            extra += diff[i];
-            long long effective = sum + extra;
-
-            if (effective < mid) {
-                long long need = mid - effective;
-                if (need > k) return false;
-                k -= need;
-                extra += need;
-                int end = min(n, i + 2 * r + 1);
-                diff[end] -= need;
-            }
-
-            int addPos = i + r + 1;
-            if (addPos < n) sum += stations[addPos];
-            int removePos = i - r;
-            if (removePos >= 0) sum -= stations[removePos];
-        }
-
-        return true;
-    }
+    return true;
+  }
 };
