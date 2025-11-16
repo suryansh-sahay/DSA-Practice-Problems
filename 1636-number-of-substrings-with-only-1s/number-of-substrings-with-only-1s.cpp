@@ -1,13 +1,21 @@
 class Solution {
 public:
-   
-    const int MOD=1e9+7;
+    const int mod = 1000000007;
+
+    long long count(long long len) {
+        return len * (len + 1) / 2;
+    }
+
     int numSub(string s) {
-        long long ans=0, temp=0;
-        for(char c: s){
-            if(c=='0') ans=(ans+temp*(temp+1)/2)%MOD, temp=0;
-            else temp++; 
+        long long len = 0, ans = 0;
+        for (char c : s) {
+            if (c == '1') len++;
+            else {
+                ans = (ans + count(len)) % mod;
+                len = 0;
+            }
         }
-        return (ans+temp*(temp+1)/2)%MOD;
+        if (len) ans = (ans + count(len)) % mod;
+        return ans % mod;
     }
 };
