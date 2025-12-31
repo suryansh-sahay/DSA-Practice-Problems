@@ -1,18 +1,38 @@
+int dfs(vector<vector<int>>&grid,int i,int j)
+{
+    int m=grid.size();
+    int n=grid[0].size();
+    if(i<0 or j<0 or i>=m or j>=n or grid[i][j]==0)
+    return 0;
+    grid[i][j]=0;
+    int area=1;
+    area=area+dfs(grid,i+1,j);
+    area=area+dfs(grid,i-1,j);
+    area=area+dfs(grid,i,j+1);
+    area=area+dfs(grid,i,j-1);
+  return area;
+}
 class Solution {
 public:
     int maxAreaOfIsland(vector<vector<int>>& grid) {
-        int ans = 0;
-        n = grid.size(), m = grid[0].size();
-        for (int i = 0; i < n; i++) 
-            for (int j = 0; j < m; j++)
-                if (grid[i][j]) ans = max(ans, trav(i, j, grid));
-        return ans;
-    }
-private:
-    int n, m;
-    int trav(int i, int j, vector<vector<int>>& grid) {
-        if (i < 0 || j < 0 || i >= n || j >= m || !grid[i][j]) return 0;
-        grid[i][j] = 0;
-        return 1 + trav(i-1, j, grid) + trav(i, j-1, grid) + trav(i+1, j, grid) + trav(i, j+1, grid);
+        int m=grid.size();
+        int n=grid[0].size();
+        int maxarea=0;
+        if(grid.empty())
+        return 0;
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(grid[i][j]==1)
+                {
+                   int area= dfs(grid,i,j);
+                    maxarea=max(area,maxarea);
+                }
+
+            }
+        }
+        return maxarea;
+        
     }
 };
