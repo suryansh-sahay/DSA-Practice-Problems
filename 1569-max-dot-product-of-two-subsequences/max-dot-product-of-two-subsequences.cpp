@@ -1,36 +1,27 @@
 class Solution {
 public:
-    vector<int> nums1, nums2;
-    vector<vector<int>> memo;
-    int n, m;
-    const int NEG_INF = -1e9;
+    int maxDotProduct(vector<int>& nums1, vector<int>& nums2) {
+        int n=nums1.size();
+        int m=nums2.size();
 
-    int dp(int i, int j) {
-        if (i == n || j == m)
-            return NEG_INF;
+        vector<vector<int>> dp(n, vector<int>(m));
 
-        if (memo[i][j] != INT_MIN)
-            return memo[i][j];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                int prod = nums1[i]*nums2[j];
 
-        int take = nums1[i] * nums2[j];
+                int cmax = prod;
+                if(i>0 && j>0){
+                    cmax = max(cmax, cmax+dp[i-1][j-1]);
+                }
 
-        int res = max({
-            take + dp(i + 1, j + 1), 
-            take,                  
-            dp(i + 1, j),          
-            dp(i, j + 1)             
-        });
+                if(i>0) cmax = max(cmax, dp[i-1][j]);
+                if(j>0) cmax = max(cmax, dp[i][j-1]);
 
-        return memo[i][j] = res;
-    }
+                dp[i][j] = cmax;
+            }
+        }
 
-    int maxDotProduct(vector<int>& a, vector<int>& b) {
-        nums1 = a;
-        nums2 = b;
-        n = nums1.size();
-        m = nums2.size();
-
-        memo.assign(n, vector<int>(m, INT_MIN));
-        return dp(0, 0);
+        return dp[n-1][m-1];
     }
 };
