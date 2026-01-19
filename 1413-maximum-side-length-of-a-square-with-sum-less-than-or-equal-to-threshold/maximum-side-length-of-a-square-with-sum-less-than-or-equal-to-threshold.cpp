@@ -27,12 +27,10 @@ public:
 
         vector<vector<int>> pref = mat;
 
-        // Row-wise prefix sum
         for (int i = 0; i < n; i++)
             for (int j = 1; j < m; j++)
                 pref[i][j] += pref[i][j - 1];
 
-        // Column-wise prefix sum
         for (int j = 0; j < m; j++)
             for (int i = 1; i < n; i++)
                 pref[i][j] += pref[i - 1][j];
