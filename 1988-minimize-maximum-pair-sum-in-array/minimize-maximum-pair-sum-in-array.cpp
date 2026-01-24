@@ -1,55 +1,40 @@
-const int N=512, mask=511, bshift=9;
-int freq[N];
+class Solution {
+private:
 
-void radix_sort(int* nums, int n) {
-    int* output = (int*)alloca(n * sizeof(int));  // buffer
-    unsigned M=*max_element(nums, nums+n);
-    const int Mround = max(1, int(31-countl_zero(M)+bshift)/bshift);
-    int* in=nums;
-    int* out=output;
-    bool swapped=0;
+    vector<int> countSort(vector<int>& arr) {
+        int n = arr.size();
+        int maxval = 0;
+        for (int i = 0; i < n; i++)
+            maxval = max(maxval, arr[i]);
 
-    for (int round=0; round<Mround; round++) {
-        const int shift=round*bshift;
-        memset(freq, 0, sizeof(freq));
+        vector<int> cntArr(maxval + 1, 0);
 
         for (int i = 0; i < n; i++)
-            freq[(in[i] >> shift) & mask]++;
+            cntArr[arr[i]]++;
 
-        partial_sum(freq, freq+N, freq);
+        for (int i = 1; i <= maxval; i++)
+            cntArr[i] += cntArr[i - 1];
 
+        vector<int> ans(n);
         for (int i = n - 1; i >= 0; i--) {
-            uint64_t val = in[i];
-            uint64_t x = (val >> shift) & mask;
-            out[--freq[x]] = val;
+            ans[cntArr[arr[i]] - 1] = arr[i];
+            cntArr[arr[i]]--;
         }
 
-        swap(in, out);
-        swapped = !swapped;
+        return ans;
     }
 
-    // If needed, copy back
-    if (swapped)
-        memcpy(nums, in, n * sizeof(int));
-}
-class Solution {
 public:
-    static int minPairSum(vector<int>& nums) {
-        const int n=nums.size();
-        int* nums_=nums.data();
-        if (n>1024) radix_sort(nums_, n);
-        else sort(nums_, nums_+n);
-        
-        int maxP=0;
-        for(int i=0; i<n/2; i++)
-            maxP=max(maxP, nums_[i]+nums_[n-1-i]);
-        return maxP;
+    int minPairSum(vector<int>& nums) {
+        nums = countSort(nums);
+
+        int mP = 0;
+        int i = 0;
+        while(i < nums.size() / 2) {
+            mP = max(mP, nums[i] + nums[nums.size() - i - 1]);
+            i ++;
+        }
+
+        return mP;
     }
 };
-auto init = []()
-{ 
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-    return 'c';
-}();
