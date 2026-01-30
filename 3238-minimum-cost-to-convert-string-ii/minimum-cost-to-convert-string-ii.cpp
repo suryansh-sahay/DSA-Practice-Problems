@@ -11,7 +11,6 @@ public:
         unordered_map<string, int> strToId;
         int idCounter = 0;
 
-        // Map strings to unique IDs
         for (const string& s : original)
             if (!strToId.count(s)) strToId[s] = idCounter++;
         for (const string& s : changed)
@@ -26,14 +25,12 @@ public:
         for (int i = 0; i < idCounter; ++i)
             dist[i][i] = 0;
 
-        // Direct transformations
         for (int i = 0; i < original.size(); ++i) {
             int u = strToId[original[i]];
             int v = strToId[changed[i]];
             dist[u][v] = min(dist[u][v], (long long)cost[i]);
         }
 
-        // Floyd–Warshall
         for (int k = 0; k < idCounter; ++k)
             for (int i = 0; i < idCounter; ++i)
                 for (int j = 0; j < idCounter; ++j)
@@ -55,11 +52,9 @@ public:
         for (int i = 0; i < n; ++i) {
             if (dp[i] == INF) continue;
 
-            // Match single character
             if (source[i] == target[i])
                 dp[i + 1] = min(dp[i + 1], dp[i]);
 
-            // Try substring transformations
             for (int len : lengths) {
                 if (i + len > n) break;
 
