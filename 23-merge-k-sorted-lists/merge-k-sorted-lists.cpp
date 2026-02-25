@@ -1,4 +1,4 @@
-/**3
+/**
  * Definition for singly-linked list.
  * struct ListNode {
  *     int val;
@@ -10,27 +10,41 @@
  */
 class Solution {
 public:
-    ListNode* func(vector<ListNode*>& lists) {
-        priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> pq;
-        ListNode* dummy=new ListNode(0);
-        ListNode* temp=dummy;
-        for(auto arr:lists){
-            if(arr)
-            pq.push({arr->val, arr});
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if (lists.empty()) {
+            return nullptr;
         }
-        while(!pq.empty()){
-            auto p=pq.top();
-            pq.pop();
-            temp->next=p.second;
-            temp=temp->next;
-            if(temp->next){
-            pq.push({temp->next->val, temp->next});
+
+        while (lists.size() > 1) {
+            vector<ListNode*> temp;
+            for (size_t i = 0; i < lists.size(); i += 2) {
+                ListNode* l1 = lists[i];
+                ListNode* l2 = i + 1 < lists.size() ? lists[i + 1] : nullptr;
+                temp.push_back(mergeLists(l1, l2));
             }
+            lists = move(temp);
         }
-        return dummy->next;
+
+        return lists[0];        
     }
 
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        return func(lists);
-    }  
+private:
+    ListNode* mergeLists(ListNode* l1, ListNode* l2) {
+        ListNode dummy;
+        ListNode* node = &dummy;
+
+        while (l1 && l2) {
+            if (l1->val > l2->val) {
+                node->next = l2;
+                l2 = l2->next;
+            } else {
+                node->next = l1;
+                l1 = l1->next;
+            }
+            node = node->next;
+        }
+
+        node->next = l1 ? l1 : l2;
+        return dummy.next;
+    }    
 };
