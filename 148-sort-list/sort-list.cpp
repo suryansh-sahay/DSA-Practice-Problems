@@ -1,62 +1,78 @@
-				
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
 class Solution {
 public:
-    ListNode* sortList(ListNode* head) {
-        if(head == NULL || head ->next == NULL)
-            return head;
-        ListNode *temp = NULL;
-        ListNode *slow = head;
-        ListNode *fast = head;
-        
-        while(fast !=  NULL && fast -> next != NULL)
-        {
-            temp = slow;
-            slow = slow->next;          //slow increment by 1
-            fast = fast ->next ->next;  //fast incremented by 2
-            
-        }   
-        temp -> next = NULL;            //end of first left half
-        
-        ListNode* l1 = sortList(head);    //left half recursive call
-        ListNode* l2 = sortList(slow);    //right half recursive call
-        
-        return mergelist(l1, l2);         //mergelist Function call
-            
+    ListNode* getmid(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head->next;
+
+        while (fast != NULL && fast->next != NULL) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
     }
-    
-    ListNode* mergelist(ListNode *l1, ListNode *l2)
-    {
-        ListNode *ptr = new ListNode(0);
-        ListNode *curr = ptr;
-        
-        while(l1 != NULL && l2 != NULL)
-        {
-            if(l1->val <= l2->val)
-            {
-                curr -> next = l1;
-                l1 = l1 -> next;
+
+    ListNode* merge(ListNode* left, ListNode* right) {
+        if (left == NULL)
+            return right;
+        if (right == NULL)
+            return left;
+
+        ListNode* dummy = new ListNode(0);
+        ListNode* temp = dummy;
+
+        while (left != NULL && right != NULL) {
+            if (left->val < right->val) {
+                temp->next = left;
+                temp = left;
+                left = left->next;
+            } else {
+                temp->next = right;
+                temp = right;
+                right = right->next;
             }
-            else
-            {
-                curr -> next = l2;
-                l2 = l2 -> next;
-            }
-        
-        curr = curr ->next;
-        
         }
-        if(l1 != NULL)
-        {
-            curr -> next = l1;
-            l1 = l1->next;
+        while (left != NULL) {
+            temp->next = left;
+            temp = left;
+            left = left->next;
         }
-        
-        if(l2 != NULL)
-        {
-            curr -> next = l2;
-            l2 = l2 ->next;
+        while (right != NULL) {
+            temp->next = right;
+            temp = right;
+            right = right->next;
         }
-        
-        return ptr->next;
+        dummy = dummy->next;
+        return dummy;
+    }
+
+    ListNode* sortList(ListNode* head) {
+        // using merge sort
+
+        // base case
+        if (head == NULL || head->next == NULL)
+            return head;
+
+        ListNode* mid = getmid(head);
+
+        ListNode* left = head;
+        ListNode* right = mid->next;
+        mid->next = NULL;
+
+        left = sortList(left);
+        right = sortList(right);
+
+        ListNode* result = merge(left, right);
+
+        return result;
     }
 };
