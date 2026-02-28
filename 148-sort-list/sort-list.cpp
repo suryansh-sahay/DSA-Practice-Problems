@@ -24,9 +24,7 @@ public:
         ListNode* l=head;
         ListNode* r=mid->next;
         mid->next=NULL;
-        l=ms(l);
-        r=ms(r);
-       return merge(l, r);
+       return merge(ms(l), ms(r));
     }
     ListNode* merge(ListNode* l, ListNode* r){
         ListNode* dummy=new ListNode(-1);
