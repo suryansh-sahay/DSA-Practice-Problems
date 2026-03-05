@@ -1,19 +1,48 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+
 class Solution {
 public:
     Node* copyRandomList(Node* head) {
-        std:unordered_map<Node*,Node*> hashMap;
-        Node* cur = head;
-        while (cur) {
-            hashMap[cur] = new Node(cur->val);
-            cur = cur->next;
+        
+        Node* node=head;
+        while(node){
+            Node* temp=node->next;
+            node->next=new Node(node->val);
+            node->next->next=temp;
+            node=temp;
         }
-        cur = head;
-        while (cur) {
-            Node* copy = hashMap[cur];
-            copy->next = hashMap[cur->next];
-            copy->random = hashMap[cur->random];
-            cur = cur->next;
+        
+        node=head;
+        while(node){
+            if(node->random)
+                node->next->random=node->random->next;
+            node=node->next->next; 
         }
-        return hashMap[head];
+        
+        Node* ans=new Node(0); 
+        Node* helper=ans;
+    
+        while(head){
+            helper->next=head->next;
+            helper=helper->next;
+            
+            head->next=head->next->next;
+            head=head->next; 
+        }
+        return ans->next;
     }
 };
