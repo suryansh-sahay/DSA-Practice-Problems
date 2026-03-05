@@ -42,7 +42,7 @@ public:
             if(temp==head) head=kth;
             else prev->next=kth, prev=temp;
        
-            reverse(temp);  
+            reverse(prev);  
             temp=next;
         }
         return head;
