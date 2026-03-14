@@ -1,4 +1,14 @@
 # Write your MySQL query statement below
-SELECT MAX(salary) as SecondHighestSalary
-FROM Employee 
-WHERE salary<(SELECT MAX(salary) FROM Employee);
+SELECT
+CASE 
+WHEN COUNT(DISTINCT salary)<2 THEN NULL
+   ELSE  
+   (SELECT MIN(salary)
+    FROM (SELECT DISTINCT salary
+        FROM Employee
+        ORDER BY salary DESC
+         LIMIT 2
+    ) AS temp
+   )
+END AS SecondHighestSalary
+FROM Employee;
