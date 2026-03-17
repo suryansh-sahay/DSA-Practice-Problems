@@ -15,7 +15,7 @@ FROM(
 SELECT d.name as Department, 
     e.name as Employee,
     Salary,
-    RANK() OVER(PARTITION BY departmentID
+    DENSE_RANK() OVER(PARTITION BY departmentID
                     ORDER BY salary DESc) AS r
 FROM Employee e
 JOIN Department d
