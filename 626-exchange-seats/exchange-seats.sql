@@ -1,16 +1,10 @@
 # Write your MySQL query statement below
 
 
--- SELECT *,
---     LAG(student) OVER() as p, 
---     LEAD(student) OVER() as n
--- FROM Seat;
-
-SELECT id,
-CASE 
-    WHEN id%2=1 THEN COALESCE(LEAD(student) OVER(), student)
-ELSE
-    LAG(student) OVER()
-END AS student
-FROM Seat;
-    
+SELECT  
+CASE WHEN id%2=1 AND id<(SELECT MAX(id) from seat) THEN id+1
+     WHEN id%2=0 THEN id-1
+ELSE id
+END as id, student
+FROM seat
+ORDER BY id;
