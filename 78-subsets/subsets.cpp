@@ -1,23 +1,16 @@
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> res;
-        vector<int> subset;
-
-        createSubset(nums, 0, res, subset);
-        return res;        
-    }
-
-    void createSubset(vector<int>& nums, int index, vector<vector<int>>& res, vector<int>& subset) {
-        if (index == nums.size()) {
-            res.push_back(subset);
-            return;
+        int n=nums.size();
+        vector<vector<int>> ans;
+        for(int num=0; num<(1<<n); num++){
+            vector<int> temp;
+            for(int i=0; i<n; i++){
+                if(num&(1<<i)) temp.push_back(nums[i]);
+            }
+            ans.push_back(temp);
         }
-
-        subset.push_back(nums[index]);
-        createSubset(nums, index + 1, res, subset);
-
-        subset.pop_back();
-        createSubset(nums, index + 1, res, subset);
-    }    
+        sort(ans.begin(), ans.end());
+        return ans;  
+    }
 };
