@@ -1,11 +1,13 @@
 class Solution {
 public:
-    static bool judgeCircle(string& moves) {
-        int balanced=0;
+    bool judgeCircle(string moves) {
+        int h=0, v=0;
         for(char c: moves){
-            balanced+=(c=='R')-(c=='L');
-            balanced+=((c=='U')-(c=='D'))<<15;
+            if(c=='U') v++;
+            else if(c=='D') v--;
+            else if(c=='R') h++;
+            else h--;
         }
-        return balanced==0;
+        return !h&&!v;
     }
 };
