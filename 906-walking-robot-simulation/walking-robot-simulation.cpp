@@ -1,49 +1,47 @@
 class Solution {
 public:
     int robotSim(vector<int>& commands, vector<vector<int>>& obstacles) {
-        int dir = 0;
 
-        map<pair<int,int>, bool> mp;
-        for(auto it : obstacles){
-            mp[{it[0], it[1]}] = true;
+        auto f = [](int x, int y) {
+            return x * 60010 + y;
+        };
+
+        unordered_set<int> st;
+        for(auto &obs : obstacles){
+            st.insert( f(obs[0], obs[1]) ) ;
         }
 
-        int x = 0, y = 0;
-        int ans = 0;
+        vector<pair<int,int>> dir = { {0,1} , {1,0} , {0,-1}, {-1,0}};
 
-        for(auto it : commands){
-            if(it < 0){
-                if(it == -1) 
-                    dir = (dir + 1) % 4;
-                else 
-                    dir = (dir - 1 + 4) % 4;
-            }
-            else{
-                if(dir == 0){
-                    int maxi = y + it;
-                    while(y < maxi && !mp[{x, y+1}])
-                        y++;
-                }
-                else if(dir == 1){
-                    int maxi = x + it;
-                    while(x < maxi && !mp[{x+1, y}])
-                        x++;
-                }
-                else if(dir == 2){
-                    int mini = y - it;
-                    while(y > mini && !mp[{x, y-1}])
-                        y--;
-                }
-                else if(dir == 3){
-                    int mini = x - it;
-                    while(x > mini && !mp[{x-1, y}])
-                        x--;
-                }
+        int x = 0 , y =0;
+        int d = 0; //north
+        long long max_dist = 0;
 
-                ans = max(ans, x*x + y*y);
+        for(int cmd : commands){
+            if(cmd == -2){
+                d = (d+3)%4 ;
+            } else if (cmd == -1){
+                d = (d+1)%4 ;
+            } else {
+                for(int i = 0; i<cmd; i++){
+                    int nx = x + dir[d].first;
+                    int ny = y + dir[d].second;
+
+                    int key = f(nx , ny);
+
+                    if(st.find(key) != st.end()){
+                        break;
+                    }
+
+                    x = nx;
+                    y = ny;
+
+                    max_dist = max( max_dist, 1LL*x*x + 1LL* y*y);
+                
+                }
             }
         }
-
-        return ans;
+        
+        return max_dist;
     }
 };
