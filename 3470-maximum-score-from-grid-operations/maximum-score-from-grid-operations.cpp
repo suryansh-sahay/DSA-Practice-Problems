@@ -1,33 +1,29 @@
 class Solution {
-using ll = long long;
 public:
-    long long maximumScore(vector<vector<int>>& grid) {
-        int n = grid.size();
-        if (n == 1) 
-            return 0;
-        vector<ll> dp0(n + 1, 0), dp1(n + 1, 0);
+    long long maximumScore(vector<vector<int>>& g) {
+        int n = g.size();
+        vector p(n, vector<long long>(n + 1, 0));
+        for (int j = 0; j < n; ++j)
+            for (int i = 0; i < n; ++i)
+                p[j][i + 1] = p[j][i] + g[i][j];
 
-        for (int j = 1; j < n; j++) {
-            vector<ll> new_dp0(n + 1, 0), new_dp1(n + 1, 0);
-            for (int i = 0; i <= n; i++) {
-                ll prev = 0;
-                ll curr = 0;
-                for (int x = 0; x < i; x++) 
-                    curr += grid[x][j];
-                for (int y = 0; y <= n; y++) {
-                    if (y > 0 && y <= i) {
-                        curr -= grid[y - 1][j];
-                    }
-                    if (y > i) {
-                        prev += grid[y - 1][j - 1];
-                    }
-                    new_dp0[y] = max({new_dp0[y], prev + dp0[i], dp1[i]});
-                    new_dp1[y] = max({new_dp1[y], curr + dp1[i], curr + prev + dp0[i]});
-                }
-            }
-            dp0 = new_dp0;
-            dp1 = new_dp1;
+        vector<long long> f(n + 1), d(n + 1);
+        for (int j = 1; j < n; ++j) {
+            vector<long long> nf(n + 1), nd(n + 1);
+            long long b = -2e18;
+            for (int h = 0; h <= n; ++h)
+                b = max(b, f[h] - p[j - 1][h]), nf[h] = b + p[j - 1][h];
+            b = -2e18;
+            for (int h = 0; h <= n; ++h)
+                b = max(b, d[h]), nf[h] = max(nf[h], b);
+            b = -2e18;
+            for (int h = n; h >= 0; --h)
+                nd[h] = b - p[j][h], b = max(b, max(f[h], d[h]) + p[j][h]);
+            f = nf, d = nd;
         }
-        return *max_element(dp1.begin(), dp1.end());
+        long long a = 0;
+        for (int i = 0; i <= n; ++i)
+            a = max({a, f[i], d[i]});
+        return a;
     }
 };
