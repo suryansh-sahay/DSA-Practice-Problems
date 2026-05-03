@@ -1,9 +1,19 @@
+
+
 class Solution {
 public:
     bool rotateString(string s, string goal) {
-        int n=s.size(), m=goal.size();
-        if(n!=m) return false;
-            
-        return (s+s).find(goal) != -1;
+        if (s.length() != goal.length()) {
+            return false;
+        }
+
+        string word = s + s;
+
+        for (int i = 0; i < s.length(); i++) {
+            if (word.substr(i, s.length())==goal) {
+                return true;
+            }
+        }
+        return false;
     }
 };
