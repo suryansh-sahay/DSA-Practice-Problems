@@ -1,22 +1,12 @@
 class Solution {
 public:
     bool isGood(vector<int>& nums) {
-        int n = nums.size() - 1;
-        bitset<201> seen;
-        bool dup = 0;
-
-        for (auto& num : nums) {
-            if (num > n) return false;
-
-            if (seen.test(num)) {
-                if (num < n || dup) return false;
-                dup |= 1;
-                continue;
-            }
-
-            seen.set(num);
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        
+        for(int i=0; i<=n-2; i++){
+            if(nums[i]!=i+1) return false;
         }
-
-        return true;
+        return nums[n-1]==n-1;
     }
 };
