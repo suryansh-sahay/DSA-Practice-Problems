@@ -1,32 +1,21 @@
 class Solution {
 public:
     int numberOfSpecialChars(string word) {
-        vector<int> firstUpper(26, -1);
-        vector<int> lastLower(26, -1);
+        vector<int> arrl(26, -1);
+        vector<int> arru(26, -1);
 
-        for (int i = 0; i < word.size(); i++) {
-            char ch = word[i];
-
-            if (islower(ch)) {
-                lastLower[ch - 'a'] = i;
-            } 
+        for(int i=0; i<word.size(); i++){
+            char ch=word[i];
+            if(islower(ch)) arrl[ch-'a']=i;
             else {
-                if (firstUpper[ch - 'A'] == -1) {
-                    firstUpper[ch - 'A'] = i;
-                }
+                if(arru[ch-'A']==-1) arru[ch-'A']=i;
             }
         }
+        int count=0;
 
-        int count = 0;
-
-        for (int i = 0; i < 26; i++) {
-            if (lastLower[i] != -1 &&
-                firstUpper[i] != -1 &&
-                lastLower[i] < firstUpper[i]) {
-                count++;
-            }
+        for(int i=0; i<26; i++){
+            if(arrl[i]!=-1 && arru[i]!=-1 && arru[i]>arrl[i]) count++;
         }
-
         return count;
     }
-};
+}; 
