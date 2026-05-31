@@ -1,11 +1,14 @@
 class Solution {
 public:
     bool asteroidsDestroyed(int mass, vector<int>& asteroids) {
-        long long val=1LL*mass;
+
+        int maxi=*max_element(asteroids.begin(), asteroids.end());
+        long long val=mass;
         sort(asteroids.begin(), asteroids.end());
         for(int i: asteroids){
             if(val<i) return false;
             val+=i;
+            if(val>maxi) return true;
         }
         return true;
     }
