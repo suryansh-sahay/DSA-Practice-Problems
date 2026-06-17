@@ -6,8 +6,7 @@ public:
         for(char el: s){
             if(el=='*') ans = (ans==0) ? ans : ans-1;
             else if(el == '#') ans *= 2;
-            else if(el == '%') ans = ans;
-            else ans ++;
+            else if(el !='%') ans ++;
         }
         if (k>=ans) return '.';
         
