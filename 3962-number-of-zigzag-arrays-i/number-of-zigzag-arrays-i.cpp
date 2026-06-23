@@ -1,38 +1,21 @@
+constexpr int P=1e9+7, N=2000;
+using ll=long long;
+static ll dp[N]; 
 class Solution {
 public:
-    int zigZagArrays(int n, int l, int r) {
-        if (n == 1) return r - l + 1;
-
-        const int MOD = 1e9 + 7;
-        vector<long long> inc(r + 2, 0), dec(r + 2, 0);
-
-        for (int x = l; x <= r; x++) {
-            inc[x] = 1;
-            dec[x] = 1;
-        }
-
-        for (int len = 2; len <= n; len++) {
-            vector<long long> newInc(r + 2, 0), newDec(r + 2, 0);
-            long long prefix = 0;
-            for (int x = l; x <= r; x++) {
-                newInc[x] = prefix;
-                prefix = (prefix + dec[x]) % MOD;
+    static int zigZagArrays(int n, int l, int r) {
+        const int m=r-l+1;
+        fill_n(dp, m, 1);
+        for(int i=1; i<n; i++){
+            bool dir=i&1;
+            ll Sum=0;
+            int i0=(-dir & m-1), iN=(-!dir &m-1), step=(dir)?-1:1;
+            for( int j=i0; j!=iN+step; j+=step){
+                ll x=dp[j];              
+                dp[j]=Sum;              
+                Sum=(Sum+x)%P;
             }
-
-            long long suffix = 0;
-            for (int x = r; x >= l; x--) {
-                newDec[x] = suffix;
-                suffix = (suffix + inc[x]) % MOD;
-            }
-            inc = newInc;
-            dec = newDec;
         }
-
-        long long ans = 0;
-        for (int x = l; x <= r; x++) {
-            ans = (ans + inc[x] + dec[x]) % MOD;
-        }
-
-        return (int)ans;
+        return 2*reduce(dp, dp+m, 0LL)%P;
     }
 };
