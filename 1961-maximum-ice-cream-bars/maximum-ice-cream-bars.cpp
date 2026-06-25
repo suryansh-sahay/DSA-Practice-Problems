@@ -1,33 +1,24 @@
-constexpr int M = 1e5 + 1;
-int freq[M];
 class Solution {
 public:
-    static int maxIceCream(vector<int>& costs, int coins) {
-        int xMax = 0;
-        for (int x : costs) {
-            freq[x]++;
-            xMax = max(xMax, x);
+    int maxIceCream(vector<int>& costs, int coins) {
+        int max_cost=0;
+        int ans=0;
+        for(int i=0;i<costs.size();i++){
+            max_cost=max(max_cost,costs[i]);
         }
-        int cnt = 0;
-        for (int x = 1; x <= xMax; x++) {
-            const int f = freq[x];
-            if (f == 0)
-                continue;
-            int buy = min(coins / x, f);
-            if (buy == 0)
-                break;
-            cnt += buy;
-            coins -= buy * x;
+        vector<int> cnt(max_cost+1,0);
+        for(int i=0;i<costs.size();i++){
+            cnt[costs[i]]++;
         }
-        // reset for the next testcase
-        for (int x : costs)
-            freq[x] = 0;
-        return cnt;
+        for(int i=0;i<max_cost+1;i++){
+            if(cnt[i]==0) continue;
+            if(coins<cnt[i]) break;
+            long long total=cnt[i];
+            long long num = min(total,(long long)coins/i);
+            ans+=num;
+            coins-=num*i;
+
+        }
+        return ans;
     }
 };
-auto init = []() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    return 'c';
-}();
