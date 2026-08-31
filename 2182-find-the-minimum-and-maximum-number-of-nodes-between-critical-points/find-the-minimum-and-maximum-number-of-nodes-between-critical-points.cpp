@@ -5,7 +5,6 @@ public:
         ListNode* cur = head->next;
 
         int idx = 1;
-
         int firstCritical = -1;
         int lastCritical = -1;
         int minDist = INT_MAX;
@@ -17,25 +16,15 @@ public:
             bool isMin = cur->val < prev->val && cur->val < next->val;
 
             if(isMax || isMin){
-                if(lastCritical == -1){
-                    firstCritical = idx;
-                }
-                else {
-                    minDist = min(minDist, idx - lastCritical);
-                }
-
+                if(lastCritical == -1) firstCritical = idx;
+                else minDist = min(minDist, idx - lastCritical);
                 lastCritical = idx;
             }
-
             prev = cur;
             cur = next;
             idx++;
         }
-
-        if(firstCritical == -1 || firstCritical == lastCritical){
-            return {-1, -1};
-        }
-
+        if(firstCritical == -1 || firstCritical == lastCritical) return {-1, -1};
         int maxDist = lastCritical - firstCritical;
 
         return {minDist, maxDist};
