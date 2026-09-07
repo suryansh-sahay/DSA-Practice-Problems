@@ -9,8 +9,8 @@ public:
         for(int num: nums2){
             if(temp!=num && freq.count(num)){
                 ans.push_back(num);
+                temp=num;
             }
-            temp=num;
         }
         return ans;
     }
