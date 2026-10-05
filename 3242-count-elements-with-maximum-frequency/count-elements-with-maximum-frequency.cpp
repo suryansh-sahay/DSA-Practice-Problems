@@ -1,14 +1,13 @@
 class Solution {
 public:
     int maxFrequencyElements(vector<int>& nums) {
-        vector<int> quan(101,0); //frequency
-        int maxi=0;
-        int num=0;
-        for(int i=0; i<nums.size(); i++){
-            quan[nums[i]]++;
-            if(maxi == quan[nums[i]]) num++;
-            else if(maxi < quan[nums[i]]) maxi=quan[nums[i]], num=1;
+        vector<int> arr(100,0);
+        int maxi=0, freq=0, no=0;
+        for(int num: nums){
+            arr[num-1]++;
+            if(arr[num-1]>maxi) maxi=arr[num-1], freq=1;
+            else if(arr[num-1]==maxi) freq++;
         }
-        return num*maxi;
+        return maxi*freq;
     }
 };
