@@ -1,29 +1,26 @@
 class Solution {
 public:
     vector<int> sortArray(vector<int>& nums) {
-        int low=0, high=nums.size()-1;
-        mergeSort(nums, low, high);
+        ms(nums, 0, nums.size()-1);
         return nums;
     }
-    void outPlaceMerge(vector<int> &nums, int low, int mid, int high) {
-	if (low >= high) return;
-	int l = low, r = mid + 1, k = 0, size = high - low + 1;
-	vector<int> sorted(size, 0);
-	while (l <= mid and r <= high)
-		sorted[k++] = nums[l] < nums[r] ? nums[l++] : nums[r++];
-	while (l <= mid) 
-		sorted[k++] = nums[l++];
-	while (r <= high) 
-		sorted[k++] = nums[r++];
-	for (k = 0; k < size; k++)
-		nums[k + low] = sorted[k];
-}
+    void ms(vector<int>& arr, int l, int h){
+        if(l>=h) return;
+        int mid=l+(h-l)/2;
+        ms(arr, l, mid);
+        ms(arr, mid+1, h);
+        return merge(arr, l, mid, h);
+    }
+    void merge(vector<int>& arr, int l, int mid, int h){
+        vector<int> temp;
+        int left=l, right=mid+1;
+        while(left<=mid && right<=h){
+            if(arr[left]<=arr[right]) temp.push_back(arr[left++]);
+            else temp.push_back(arr[right++]);
+        }
+        while(left<=mid) temp.push_back(arr[left++]);
+        while(right<=h) temp.push_back(arr[right++]);
 
-void mergeSort(vector<int> &nums, int low, int high) {
-	if (low >= high) return;
-	int mid = (high - low) / 2 + low;
-	mergeSort(nums, low, mid);
-	mergeSort(nums, mid + 1, high);
-	outPlaceMerge(nums, low, mid, high);
-}
+        for(int i=l; i<=h; i++) arr[i]=temp[i-l];
+    }
 };
