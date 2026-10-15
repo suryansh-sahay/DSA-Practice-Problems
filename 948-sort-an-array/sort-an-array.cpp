@@ -4,23 +4,26 @@ public:
         ms(nums, 0, nums.size()-1);
         return nums;
     }
-    void ms(vector<int>& arr, int l, int h){
+
+    void ms(vector<int> &arr, int l, int h){
         if(l>=h) return;
         int mid=l+(h-l)/2;
         ms(arr, l, mid);
         ms(arr, mid+1, h);
-        return merge(arr, l, mid, h);
+        merge(arr, l, h);
     }
-    void merge(vector<int>& arr, int l, int mid, int h){
-        vector<int> temp;
-        int left=l, right=mid+1;
-        while(left<=mid && right<=h){
-            if(arr[left]<=arr[right]) temp.push_back(arr[left++]);
-            else temp.push_back(arr[right++]);
-        }
-        while(left<=mid) temp.push_back(arr[left++]);
-        while(right<=h) temp.push_back(arr[right++]);
 
-        for(int i=l; i<=h; i++) arr[i]=temp[i-l];
+    void merge(vector<int>& arr, int low, int high){
+        int mid=low+(high-low)/2;
+        vector<int> temp;
+        int l=low, r=mid+1;
+        while(l<=mid && r<=high){
+            if(arr[l]<=arr[r]) temp.push_back(arr[l++]);
+            else temp.push_back(arr[r++]);
+        }
+        while(l<=mid) temp.push_back(arr[l++]);
+        while(r<=high) temp.push_back(arr[r++]);
+
+        for(int i=low; i<=high; i++) arr[i]=temp[i-low];
     }
 };
