@@ -9,6 +9,6 @@ public:
         int j=n-1;
         while(nums[j]<=nums[i-1]) j--;
         swap(nums[i-1], nums[j]);
-        return reverse(nums.begin()+i, nums.end());
+        return reverse(nums.begin()+i, nums.begin()+n);
     }
 };
