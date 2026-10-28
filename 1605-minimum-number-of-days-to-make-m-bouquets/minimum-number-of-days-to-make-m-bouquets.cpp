@@ -1,23 +1,33 @@
 class Solution {
 public:
     int minDays(vector<int>& bloomDay, int m, int k) {
+        if ((long long)m * k > bloomDay.size()) return -1;
 
-        int n=bloomDay.size();
-        if((long long)m*k > n) return -1;
-        int l=*min_element(bloomDay.begin(), bloomDay.end());
-        int r=*max_element(bloomDay.begin(), bloomDay.end());
+        int low = 1, high = 1e9;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
 
-        while(l<=r){
-            int mid=l+(r-l)/2;
-            int count=0, m2=0; 
-            for(int num: bloomDay){
-                if(num<=mid) count++;
-                else count=0;
-                if(count==k) m2++, count=0;
-            }
-            if(m2>=m) r=mid-1;
-            else l=mid+1;
+            if (canMakeBouquets(bloomDay, m, k, mid)) high = mid;
+            else low = mid + 1;
         }
-        return l;
+        return low;
+    }
+
+private:
+    bool canMakeBouquets(vector<int>& bloomDay, int m, int k, int day) {
+        int total = 0;
+        for (int i = 0; i < bloomDay.size(); i++) {
+            int count = 0;
+            while (i < bloomDay.size() && count < k && bloomDay[i] <= day) {
+                count++;
+                i++;
+            }
+            if (count == k) {
+                total++;
+                i--;
+            }
+            if (total >= m) return true;
+        }
+        return false;
     }
 };
