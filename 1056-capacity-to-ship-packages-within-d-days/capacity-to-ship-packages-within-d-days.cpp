@@ -7,7 +7,7 @@ public:
             int mid=l+(r-l)/2;
             int count=0, sum=0;
             for(int weight: weights){
-                if(weight+sum > mid) count++, sum=0;
+                if(weight+sum > mid) {count++, sum=0; if(count>days) break;}
                 sum+=weight;
             }
             count++;
