@@ -1,32 +1,26 @@
 class Solution {
 public:
     int minDays(vector<int>& bloomDay, int m, int k) {
-        if ((long long)m * k > bloomDay.size()) return -1;
+        if((long long)m*k > bloomDay.size()) return -1;
 
-        int low = 1, high = *max_element(bloomDay.begin(), bloomDay.end());
-        while (low < high) {
-            int mid = low + (high - low) / 2;
+        int l=1, r=*max_element(bloomDay.begin(), bloomDay.end());
 
-            if (canMakeBouquets(bloomDay, m, k, mid)) high = mid;
-            else low = mid + 1;
+        while(l<r){
+            int mid=l+(r-l)/2;
+            if(func(bloomDay, m, k, mid)) r=mid;
+            else l=mid+1;
         }
-        return low;
+        return r;
     }
-
-private:
-    bool canMakeBouquets(vector<int>& bloomDay, int m, int k, int day) {
-        int total = 0;
-        for (int i = 0; i < bloomDay.size(); i++) {
-            int count = 0;
-            while (i < bloomDay.size() && count < k && bloomDay[i] <= day) {
-                count++;
-                i++;
+    bool func(vector<int> &arr, int m, int k, int mid){
+        int total=0;
+        for(int i=0; i<arr.size(); i++){
+            if(arr[i]<=mid){
+                int count=0;
+                while(i<arr.size() && arr[i]<=mid && count<k) count++, i++;
+                if(count==k) total++, i--;
             }
-            if (count == k) {
-                total++;
-                i--;
-            }
-            if (total >= m) return true;
+            if(total>=m) return true;
         }
         return false;
     }
