@@ -22,7 +22,6 @@ public:
     }
 
     bool isValidBST(TreeNode* root) {
-        if (!root) return true;
 
         inOrder(root);
         for (int i = 1; i < tree.size(); i++)
