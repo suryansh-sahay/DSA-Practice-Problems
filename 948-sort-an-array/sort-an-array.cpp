@@ -22,6 +22,6 @@ public:
         while(l<=mid) temp.push_back(nums[l]), l++;
         while(r<=high) temp.push_back(nums[r]), r++;
 
-        for(int i=low; i<=high; i++) nums[i]=temp[i-low];
+        for(int i=0; i<temp.size(); i++) nums[i+low]=temp[i];
     }
 };
