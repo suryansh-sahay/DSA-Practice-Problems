@@ -6,9 +6,9 @@ public:
 
         int j=0, maxi=0;
         for(int i=0; i<n; i++){
-            mp[s[i]]++;
-            while(mp[s[i]]>1) mp[s[j]]--, j++;
+            if(mp.find(s[i])!=mp.end() && mp[s[i]]>=j) j=mp[s[i]]+1; 
             maxi=max(maxi, i-j+1);
+            mp[s[i]]=i;
         }
         return maxi;
     }
