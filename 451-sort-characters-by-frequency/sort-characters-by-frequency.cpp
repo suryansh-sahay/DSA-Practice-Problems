@@ -9,10 +9,8 @@ public:
 
         string ans="";
         while(!mp2.empty()){
-            auto [first, second]=mp2.top(); mp2.pop();
-            int i=0;
-            while(i<first) ans.push_back(second), i++;
-
+            auto [a,b]=mp2.top(); mp2.pop();
+            ans+=string(a,b);
         }
         return ans;
     }
