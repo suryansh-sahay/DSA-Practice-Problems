@@ -7,14 +7,14 @@ public:
             string odd=maxstr(s, i, i);
             string even=maxstr(s, i-1, i);
 
-            if(odd.length()>even.length() && odd.length()>ans.length()) ans=odd;
-            else if (even.length()>odd.length() && even.length()>ans.length()) ans=even;
+            if(odd.length()>ans.length()) ans=odd;
+            else if (even.length()>ans.length()) ans=even;
         }
         return ans;
     }
 
 private:
-    string maxstr(string s, int start, int end){
+    string maxstr(string& s, int start, int end){
         while(start>=0 && end<s.length() && s[start]==s[end]) start--, end++;
         return s.substr(start+1, end-start-1); 
     }
