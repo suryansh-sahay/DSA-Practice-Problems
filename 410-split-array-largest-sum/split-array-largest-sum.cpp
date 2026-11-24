@@ -7,15 +7,14 @@ public:
         while(l<r){
             int mid=l+(r-l)/2;
 
-            int sum=0, count=1;
+            int total=0, cnt=1;
             for(int num: nums){
-                if(sum+num > mid) count++, sum=0;
-                sum+=num;
+                if(total+num>mid) total=num, cnt++;
+                else total+=num;
             }
-
-            if(count<=k) r=mid;
+            if(cnt<=k) r=mid;
             else l=mid+1;
         }
-        return r;
+        return l;
     }
 };
