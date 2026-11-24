@@ -14,7 +14,7 @@ public:
         while(r<m){
             if(mp[s[r]]>0) cnt++;
             mp[s[r]]--;
-            while(cnt==n && l<m){
+            while(cnt==n){
                 if(r-l+1<minl) start=l, minl=r-l+1;
                 if(mp[s[l]]>=0) cnt--;
                 mp[s[l++]]++;
