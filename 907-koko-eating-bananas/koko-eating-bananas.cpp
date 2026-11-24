@@ -5,12 +5,13 @@ public:
 
         while(l<r){
             int mid=l+(r-l)/2;
+            
+            int hours=0;
+            for(int pile: piles) hours+=1+(pile-1)/mid;
 
-            int temp=0;
-            for(int num: piles) temp+=1+((num-1)/mid);
-            if(temp<=h) r=mid;
+            if(hours<=h) r=mid;
             else l=mid+1;
         }
-        return r;
+        return l;
     }
 };
