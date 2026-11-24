@@ -5,10 +5,10 @@ public:
 
         while(l<r){
             int mid=l+(r-l)/2;
-            if(mid%2==0) mid--;
-            if(nums[mid]!=nums[mid-1]) r=mid-1;
-            else l=mid+1;
+            if(mid%2==1) mid--;
+            if(nums[mid]==nums[mid+1]) l=mid+2;
+            else r=mid;
         }
-        return nums[l];
+        return nums[r];
     }
 };
