@@ -18,10 +18,9 @@ public:
                 if(r-l+1<minl) start=l, minl=r-l+1;
                 if(mp[s[l]]>=0) cnt--;
                 mp[s[l++]]++;
-
             }
             r++;
         }
-        return (start==-1?"":s.substr(start, minl));
+        return (start==-1)?"":s.substr(start, minl);
     }
 };
