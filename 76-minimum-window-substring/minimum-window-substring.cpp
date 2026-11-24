@@ -3,9 +3,6 @@ public:
     string minWindow(string s, string t) {
         int m=s.length(), n=t.length();
 
-        string ans="";
-        if(m<n) return ans;
-
         unordered_map<char, int> mp;
         for(char c: t) mp[c]++;
 
