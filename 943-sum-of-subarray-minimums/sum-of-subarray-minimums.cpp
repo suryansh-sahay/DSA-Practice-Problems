@@ -1,23 +1,41 @@
 class Solution {
+private: 
+    vector<int> findnse(vector<int>& arr){
+        int n=arr.size();
+        vector<int> ans(n); stack<int> st;
+
+        for(int i=n-1; i>=0; i--){
+            while(!st.empty() && arr[i]<=arr[st.top()]) st.pop();
+            ans[i]=st.empty()?n:st.top();
+            st.push(i);
+        }
+        return ans;
+    }
+private: 
+    vector<int> findpse(vector<int>& arr){
+        int n=arr.size();
+        vector<int> ans(n); stack<int> st;
+
+        for(int i=0; i<n; i++){
+            while(!st.empty() && arr[i]<arr[st.top()]) st.pop();
+            ans[i]=st.empty()?-1:st.top();
+            st.push(i);
+        }
+        return ans;
+    }
+
 public:
     int sumSubarrayMins(vector<int>& arr) {
-        stack<vector<int>> stack;
-        vector<int> res(arr.size(), 0);
+        vector<int> nse=findnse(arr);
+        vector<int> pse=findpse(arr);
+        long long total=0, mod=1e9+7;
 
-        for (int i = 0; i < arr.size(); i++) {
-            while (!stack.empty() && stack.top()[0] >= arr[i]) stack.pop();
+        for(int i=0; i<arr.size(); i++){
+            int nsee=nse[i]-i;
+            int psee=i-pse[i];
 
-            int j = stack.empty() ? -1 : stack.top()[1];
-            res[i] = stack.empty() ? arr[i] * (i + 1) : res[j] + arr[i] * (i - j);
-            stack.push({arr[i], i});
+            total=(total+(1LL*nsee*psee*arr[i])%mod)%mod;
         }
-
-        const long MOD = static_cast<long>(1e9 + 7);
-        long ans = 0;
-
-        for (int i = 0; i < arr.size(); i++) {
-            ans = (ans + static_cast<long>(res[i])) % MOD;
-        }
-        return static_cast<int>(ans);        
+        return (int)total;
     }
 };
