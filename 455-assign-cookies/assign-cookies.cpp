@@ -5,11 +5,11 @@ public:
         sort(s.begin(), s.end());
 
         int m=g.size(), n=s.size();
-        int i=0, j=0, ans=0;
+        int i=0, j=0;
         while(i<m && j<n){
-            if(g[i]<=s[j]) ans++, i++;
+            if(g[i]<=s[j]) i++;
             j++;
         }
-        return ans;
+        return i;
     }
 };
