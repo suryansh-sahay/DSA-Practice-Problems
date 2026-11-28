@@ -1,31 +1,30 @@
 class Solution {
 public:
-    vector<vector<string>> partition(string s) {
-        vector<vector<string>> res; // which will be our answer
-        vector<string> path; // as we are generating list everythime, so at the end this will be our list
-        helper(0, s, path, res); // calling to recursion function start from index 0 and string s
-        return res;
+    bool ispal(string s, int l, int r){
+        while(l<=r){
+            if(s[l]!=s[r]) return false;
+            l++, r--;
+        }
+        return true;
     }
-    // Entire recursive function, that generates all the partition substring
-    void helper(int index, string s, vector<string> &path, vector<vector<string>> &res){
-        // Base Condition, which means when we have done partition at the end (n), then add it to our ultimate result
-        if(index == s.size()){
-            res.push_back(path);
+    void func(int idx, string s, vector<string>& path, vector<vector<string>>& ans){
+        if(idx==s.length()){
+            ans.push_back(path);
             return;
         }
-        // Let's talk about partition
-        for(int i = index; i < s.size(); i++){
-            if(isPalindrome(s, index, i)){
-                path.push_back(s.substr(index, i - index + 1)); 
-                helper(i + 1, s, path, res);
-                path.pop_back(); 
+        for(int i=idx; i<s.length(); i++){
+            if(ispal(s, idx, i)){
+                path.push_back(s.substr(idx, i+1-idx));
+                func(i+1, s, path, ans);
+                path.pop_back();
             }
         }
     }
-    bool isPalindrome(string s, int start, int end){ 
-        while(start <= end){
-            if(s[start++] != s[end--]) return false;
-        }
-        return true;
+
+    vector<vector<string>> partition(string s) {
+        vector<string> path;
+        vector<vector<string>> ans;
+        func(0, s, path, ans);
+        return ans;
     }
 };
